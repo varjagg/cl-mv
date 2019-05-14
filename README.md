@@ -1,6 +1,7 @@
 # cl-mv
 
-Common lisp utilities for multiple values.
+Common lisp utilities for multiple values. Multiple facilities come from Paul Graham's Book
+[on lisp](http://www.paulgraham.com/onlisp.html).
 
 ## Usage
 
@@ -59,6 +60,6 @@ The library currently exposes 5 symbols.
 
 ## License
 
-Be aware that big parts of the code come from Paul Grapham's Book [on lisp](http://www.paulgraham.com/onlisp.html). I couldn't find any Licence information for that code, so use at your own risk.
+Be aware that big parts of the code come from Paul Graham's Book [on lisp](http://www.paulgraham.com/onlisp.html). I couldn't find any Licence information for that code, so use at your own risk.
 
 The remaining parts are licenced under vanilla MIT Licence.
