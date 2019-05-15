@@ -6,17 +6,17 @@
   (mvlet*-helper bindings body))
 
 (defun mvlet*-helper (bindings body)
-  (if (endp bindings)
-      `(progn ,@body)
-      (let* ((binding (car bindings))
-             (var (car binding))
-             (form (cadr binding))
-             (rec (mvlet*-helper (cdr bindings) body)))
-        (if (consp var)
-            `(multiple-value-bind ,var ,form
-               ,rec)
-            `(let (,binding)
-               ,rec)))))
+  (let* ((binding (car bindings))
+         (var (car binding))
+         (form (cadr binding))
+         (rec (if (endp (cdr bindings))
+                  body
+                  (list (mvlet*-helper (cdr bindings) body)))))
+    (if (consp var)
+        `(multiple-value-bind ,var ,form
+           ,@rec)
+        `(let (,binding)
+           ,@rec))))
 
 (defmacro mvlet ((&rest bindings) &body body)
   (mvlet-helper bindings body))
@@ -28,7 +28,6 @@
                  (rec (cdr rest) (list (cons (caar rest) (car acc))
                                        (cons (cadar rest) (cadr acc)))))))
     (rec bindings (list '() '()))))
-
 
 (defun mk-gensym-list (lst)
   (mapcar #'(lambda (x)
