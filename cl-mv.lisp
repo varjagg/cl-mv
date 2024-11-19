@@ -7,8 +7,12 @@
 
 (defun mvlet*-helper (bindings body)
   (let* ((binding (car bindings))
-         (var (car binding))
-         (form (cadr binding))
+         (var (if (atom binding)
+		  binding
+		  (car binding)))
+         (form (if (atom binding)
+		   nil
+		   (cadr binding)))
          (rec (if (endp (cdr bindings))
                   body
                   (list (mvlet*-helper (cdr bindings) body)))))
@@ -25,8 +29,11 @@
   (labels ((rec (rest acc)
              (if (endp rest)
                  (list (nreverse (car acc)) (nreverse (cadr acc)))
-                 (rec (cdr rest) (list (cons (caar rest) (car acc))
-                                       (cons (cadar rest) (cadr acc)))))))
+                 (rec (cdr rest) (if (atom (car rest))
+				     (list (cons (car rest) (car acc))
+					   (cons nil (cadr acc)))
+				     (list (cons (caar rest) (car acc))
+					   (cons (cadar rest) (cadr acc))))))))
     (rec bindings (list '() '()))))
 
 (defun mk-gensym-list (lst)
